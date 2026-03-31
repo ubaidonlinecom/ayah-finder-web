@@ -33,7 +33,16 @@ module.exports = {
       },
       fontFamily: {
         arabic: ['"Amiri"', "serif"],
-        sans: ['"Inter"', "sans-serif"],
+        scheherazade: ['"Scheherazade New"', "serif"],
+        sans: ['"Plus Jakarta Sans"', "sans-serif"],
+      },
+      boxShadow: {
+        '3xl': '0 35px 60px -15px rgba(2, 44, 34, 0.05)',
+        'luxury': '0 20px 50px -12px rgba(2, 44, 34, 0.05)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'float': 'float 4s ease-in-out infinite',
       },
     },
   },

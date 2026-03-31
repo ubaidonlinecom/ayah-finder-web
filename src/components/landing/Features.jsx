@@ -1,60 +1,54 @@
-import { Search, Shield, Zap, Layout, Share2, Bookmark } from 'lucide-react';
+import { Search, Shield, Zap, Layout, Share2, Bookmark, Layers, Sparkles } from 'lucide-react';
 
 const FeatureCard = ({ icon: Icon, title, description }) => (
-  <div className="bg-white/80 p-8 rounded-3xl border border-emerald-900/5 hover:border-gold-300 transition-all hover:shadow-2xl hover:-translate-y-2 group shadow-lg">
-    <div className="w-14 h-14 bg-emerald-950 rounded-2xl flex items-center justify-center mb-6 shadow-xl shadow-emerald-950/20 group-hover:bg-gold-accent transition-colors">
-      <Icon className="w-7 h-7 text-gold-accent group-hover:text-emerald-950" />
+  <div className="bg-white/80 p-12 rounded-[4rem] border border-emerald-950/5 hover:border-gold-accent/40 transition-luxury hover:shadow-luxury hover:-translate-y-4 group relative overflow-hidden backdrop-blur-xl">
+    {/* Floating Decorative Glow */}
+    <div className="absolute -top-16 -right-16 w-32 h-32 bg-gold-accent/5 blur-3xl opacity-0 group-hover:opacity-100 transition-luxury"></div>
+    
+    <div className="w-16 h-16 bg-emerald-950 rounded-3xl flex items-center justify-center mb-8 shadow-luxury group-hover:bg-gold-accent transition-luxury group-hover:rotate-12">
+      <Icon className="w-8 h-8 text-gold-accent group-hover:text-emerald-950 transition-luxury" />
     </div>
-    <h3 className="text-2xl font-bold text-emerald-950 mb-4">{title}</h3>
-    <p className="text-emerald-900/70 leading-relaxed font-medium">{description}</p>
+    <h3 className="text-3xl font-black text-emerald-950 mb-4 tracking-tight">{title}</h3>
+    <p className="text-xl text-emerald-900/40 leading-relaxed font-semibold transition-luxury group-hover:text-emerald-900/60">{description}</p>
   </div>
 );
 
 export default function Features() {
   const features = [
     {
-      icon: Search,
-      title: "Instant Arabic Search",
-      description: "Search Quran by Arabic words instantly. Normalizes text automatically for accurate results every time."
-    },
-    {
-      icon: Layout,
-      title: "Mutashabihat Helper",
-      description: "Perfect for Hifz students to find similar ayat and patterns that often create confusion during memorization."
-    },
-    {
-      icon: Bookmark,
-      title: "Save Your Discoveries",
-      description: "Quickly save important ayat to your collections for future reference or study sessions."
+      icon: Zap,
+      title: "Fast Search",
+      description: "Search 6,236 verses instantly. Blazing fast results for even the most complex word sequences."
     },
     {
       icon: Shield,
-      title: "Harakat Preservation",
-      description: "Displays the original Arabic text with all harakat and marks while highlighting the matched keyword."
+      title: "Arabic Friendly",
+      description: "Optimized for the Arabic script with full Harakat preservation and linguistic normalization."
     },
     {
-      icon: Zap,
-      title: "Blazing Fast Performance",
-      description: "Built for speed. Search through the entire Quran and see results instantly on any device."
+      icon: Layers,
+      title: "Pattern Detection",
+      description: "Identify global Mutashabihat and clarify similar sequences with exact side-by-side matches."
     },
     {
-      icon: Share2,
-      title: "Copy & Export",
-      description: "Easily copy ayat in beautiful Arabic script with one click to share with students or use in research."
+      icon: Layout,
+      title: "Clean Interface",
+      description: "A premium workspace designed for deep focus. No distractions, just the Quranic text."
     }
   ];
 
   return (
-    <section id="features" className="py-24 bg-cream-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-20">
-          <h2 className="text-4xl font-extrabold text-emerald-950 mb-6">Built for Quran Excellence</h2>
-          <p className="text-xl text-emerald-900/60 max-w-2xl mx-auto font-medium">
-            Everything you need for advanced Quranic search and study in a premium SaaS package.
+    <section id="features" className="py-40 bg-cream-100 relative">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="text-center mb-24 space-y-4">
+          <div className="text-emerald-950/20 text-xs font-black uppercase tracking-[0.5em] mb-4">Functional Suite</div>
+          <h2 className="text-5xl md:text-7xl font-black text-emerald-950 tracking-tight">Standard of <span className="text-gold-700">Excellence</span></h2>
+          <p className="text-2xl text-emerald-900/40 max-w-3xl mx-auto font-semibold leading-relaxed">
+            Everything you need for advanced Quranic search in a high-fidelity workspace.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {features.map((feature, idx) => (
             <FeatureCard key={idx} {...feature} />
           ))}

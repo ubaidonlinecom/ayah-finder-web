@@ -1,60 +1,55 @@
 import Link from 'next/link';
-import { Search, Heart, GitHub, Monitor } from 'lucide-react';
+import { Heart, Monitor, BookOpen, Quote } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-emerald-950 text-emerald-100 py-24 border-t border-gold-accent/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
-          <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-gold-accent rounded-xl flex items-center justify-center">
-                 <span className="text-emerald-950 font-extrabold text-2xl">A</span>
-              </div>
-              <h2 className="text-3xl font-extrabold text-white tracking-tight">
-                Ayah<span className="text-gold-accent">Finder</span>
-              </h2>
+    <footer className="bg-emerald-950 text-emerald-100 py-32 border-t border-white/5 relative overflow-hidden">
+        {/* Subtle Background Element */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gold-accent opacity-5 blur-[150px] -z-0"></div>
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 flex flex-col items-center">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-20 mb-20 w-full animate-fade-in list-none">
+                <div className="flex items-center gap-6 group">
+                    <div className="w-16 h-16 bg-gold-accent rounded-[2rem] flex items-center justify-center shadow-luxury group-hover:scale-110 transition-luxury">
+                        <span className="text-emerald-950 font-black text-3xl">A</span>
+                    </div>
+                    <div className="space-y-1">
+                        <h2 className="text-4xl font-black text-white tracking-[0.05em] leading-none mb-1">
+                            Ayah <span className="text-gold-accent opacity-80 backdrop-blur-sm">Finder</span>
+                        </h2>
+                        <p className="text-emerald-100/30 text-xs font-black uppercase tracking-[0.5em] leading-none">The Quran Search Standard</p>
+                    </div>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-center gap-14">
+                    <Link href="/" className="text-emerald-100/40 hover:text-white transition-luxury font-black text-sm uppercase tracking-[0.3em]">Home</Link>
+                    <Link href="/app" className="text-emerald-100/40 hover:text-white transition-luxury font-black text-sm uppercase tracking-[0.3em]">App</Link>
+                    <Link href="/#features" className="text-emerald-100/40 hover:text-white transition-luxury font-black text-sm uppercase tracking-[0.3em]">Features</Link>
+                </div>
+
+                <div className="flex items-center gap-6">
+                    <div className="w-14 h-14 bg-white/5 rounded-[1.5rem] border border-white/10 flex items-center justify-center group cursor-pointer hover:border-gold-accent/40 transition-luxury">
+                        <Monitor className="w-6 h-6 text-gold-accent opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-luxury" />
+                    </div>
+                    <div className="w-14 h-14 bg-white/5 rounded-[1.5rem] border border-white/10 flex items-center justify-center group cursor-pointer hover:border-gold-accent/40 transition-luxury">
+                        <Heart className="w-6 h-6 text-red-400 opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-luxury" />
+                    </div>
+                </div>
             </div>
-            <p className="text-emerald-100/60 max-w-sm mb-8 leading-relaxed font-medium">
-              The premium Quranic search utility designed for the modern Hifz student, researcher, and avid Quran learner. Find matching patterns across the entire Holy Quran in seconds.
-            </p>
-          </div>
 
-          <div>
-            <h4 className="text-white font-bold mb-6 uppercase text-sm tracking-widest">Connect</h4>
-            <ul className="space-y-4">
-              <li><Link href="/" className="hover:text-gold-accent transition-colors font-medium">Landing Page</Link></li>
-              <li><Link href="/app" className="hover:text-gold-accent transition-colors font-medium">Search App</Link></li>
-              <li><Link href="#features" className="hover:text-gold-accent transition-colors font-medium">Features</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-bold mb-6 uppercase text-sm tracking-widest">About</h4>
-            <ul className="space-y-4">
-               <li className="flex items-center gap-2 group cursor-pointer">
-                  <Monitor className="w-4 h-4 text-gold-accent group-hover:scale-110 transition-transform" />
-                  <span className="font-medium">Chrome Extension</span>
-               </li>
-               <li className="flex items-center gap-2 group cursor-pointer">
-                  <Heart className="w-4 h-4 text-gold-accent group-hover:scale-110 transition-transform" />
-                  <span className="font-medium">Support the Project</span>
-               </li>
-            </ul>
-          </div>
+            <div className="pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-10 w-full animate-fade-in list-none">
+                <p className="text-emerald-100/20 text-xs font-black tracking-[0.5em] uppercase text-center md:text-left transition-luxury hover:text-emerald-100/40">
+                    © {new Date().getFullYear()} Ayah Finder Workspace. Designed for Quranic Excellence.
+                </p>
+                <div className="flex flex-wrap justify-center items-center gap-6 text-xs text-emerald-100/20 font-black uppercase tracking-[0.3em] transition-luxury hover:text-emerald-100/40">
+                    <span>Precision Matching</span>
+                    <div className="w-1.5 h-1.5 bg-gold-accent opacity-20 rounded-full"></div>
+                    <span>Global Recognition</span>
+                    <div className="w-1.5 h-1.5 bg-gold-accent opacity-20 rounded-full"></div>
+                    <span>English UI V1.0</span>
+                </div>
+            </div>
         </div>
-
-        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-emerald-100/40 text-sm font-medium">
-            © {new Date().getFullYear()} Ayah Finder. All rights reserved. Designed for excellence.
-          </p>
-          <div className="flex items-center gap-3 text-sm text-emerald-100/40">
-             <span>Made with</span>
-             <Heart className="w-4 h-4 text-red-400 fill-red-400 animate-pulse" />
-             <span>for the Ummah</span>
-          </div>
-        </div>
-      </div>
     </footer>
   );
 }

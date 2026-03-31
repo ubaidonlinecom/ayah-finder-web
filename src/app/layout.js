@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Ayah Finder | Search Quran and Find Matching Ayat",
+  title: "Ayah Finder",
   description: "A premium Quran search tool for students of Hifz and researchers. Find matching ayat by Arabic words with instant search and normalization.",
 };
 
