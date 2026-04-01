@@ -5,12 +5,12 @@ import { useSearchParams } from 'next/navigation';
 import Navbar from '@/components/layout/Navbar';
 import SearchBar from '@/components/quran/SearchBar';
 import AyahCard from '@/components/quran/AyahCard';
+import AyahModal from '@/components/quran/AyahModal';
 import SavedAyatPanel from '@/components/quran/SavedAyatPanel';
 import Footer from '@/components/layout/Footer';
 import quranData from '@/data/quran-data.json';
 import { normalizeArabic } from '@/utils/arabic-utils';
-import { Search, Loader2, Sparkles, BookOpen, Quote, Info, ChevronRight, Layout } from 'lucide-react';
-import Link from 'next/link';
+import { Search, Loader2, Sparkles, BookOpen } from 'lucide-react';
 
 function AppContent() {
   const searchParams = useSearchParams();
@@ -21,6 +21,7 @@ function AppContent() {
   const [isSearching, setIsSearching] = useState(false);
   const [savedAyat, setSavedAyat] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
+  const [activeAyahIndex, setActiveAyahIndex] = useState(null);
 
   // Handle initial query from URL
   useEffect(() => {
@@ -53,6 +54,16 @@ function AppContent() {
     }, 400);
   };
 
+  const handleViewAyah = (index) => {
+    setActiveAyahIndex(index);
+  };
+
+  const handleNavigateAyah = (newIndex) => {
+    if (newIndex >= 0 && newIndex < results.length) {
+      setActiveAyahIndex(newIndex);
+    }
+  };
+
   // Saved Ayat Logic
   useEffect(() => {
     const saved = localStorage.getItem('ayah-finder-saved');
@@ -82,27 +93,27 @@ function AppContent() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-cream-100/50 islamic-bg">
+    <div className="flex flex-col min-h-screen bg-gray-50/20 islamic-bg">
       <Navbar />
       
-      <main className="flex-grow pt-48 pb-32 px-6 sm:px-10 lg:px-12">
-        <div className="max-w-7xl mx-auto">
-          {/* Workspace Header Area */}
-          <div className="text-center mb-24 max-w-2xl mx-auto space-y-8 animate-fade-in list-none">
-             <div className="inline-flex items-center gap-3 px-6 py-2.5 bg-emerald-950 text-gold-accent rounded-full text-xs font-black uppercase tracking-[0.2em] shadow-luxury">
-                <Layout className="w-3.5 h-3.5" />
-                Ayah Finder Web Workspace
+      <main className="flex-grow pt-28 pb-16 px-6 md:px-12">
+        <div className="max-w-6xl mx-auto flex flex-col items-center">
+          
+          {/* Header Section (Matched to Image) */}
+          <div className="text-center mb-6 max-w-xl mx-auto flex flex-col items-center">
+             <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-950 text-gold-accent rounded-full text-[9px] font-bold uppercase tracking-widest shadow-lg mb-6">
+                <Search className="w-3 h-3" />
+                Real-time Quran Search App
              </div>
-             <h1 className="text-6xl font-black text-emerald-950 tracking-tight leading-tight">
-                Unlock Divine <br />
-                <span className="text-gold-700">Patterns</span>
+             <h1 className="text-4xl md:text-5xl font-black text-slate-800 tracking-tighter leading-tight mb-4">
+                Find any Ayah <span className="text-gold-700">Instantly</span>
              </h1>
-             <p className="text-xl text-emerald-900/40 font-bold leading-relaxed">
-                Experience precision Quranic search designed for students of excellence.
+             <p className="text-base text-gray-600 font-bold leading-relaxed max-w-sm">
+                Enter an Arabic word or phrase to see matching results everywhere in the Holy Quran.
              </p>
           </div>
 
-          {/* Centered Search Area Polish */}
+          {/* Search Area (Matched to Image) */}
           <SearchBar 
             value={query} 
             onChange={setQuery} 
@@ -110,117 +121,108 @@ function AppContent() {
             disabled={isSearching}
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 items-start mt-20 animate-fade-in delay-200">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mt-8 w-full animate-fade-in list-none">
             {/* Results Section */}
-            <div className="lg:col-span-8 space-y-12 min-h-[600px]">
+            <div className="lg:col-span-8 space-y-8 min-h-[500px]">
                {isSearching ? (
-                 <div className="flex flex-col items-center justify-center py-52 bg-white/40 backdrop-blur-xl rounded-[4rem] border border-emerald-950/5 shadow-luxury list-none">
-                    <Loader2 className="w-20 h-20 text-gold-accent animate-spin mb-10 transition-luxury" />
-                    <h3 className="text-3xl font-black text-emerald-950 mb-4">Searching precisely...</h3>
-                    <p className="text-emerald-900/40 text-sm font-black uppercase tracking-widest">Validating every word sequence</p>
+                 <div className="flex flex-col items-center justify-center py-40 animate-pulse">
+                    <Loader2 className="w-8 h-8 text-emerald-950 animate-spin mb-4" />
+                    <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">Searching Quran...</p>
                  </div>
                ) : !hasSearched ? (
-                 /* Empty State Polish */
-                 <div className="flex flex-col items-start p-16 bg-white/60 backdrop-blur-xl rounded-[4rem] border border-emerald-950/5 shadow-luxury group relative overflow-hidden list-none">
-                    <div className="absolute -top-32 -right-32 w-80 h-80 bg-gold-accent/5 blur-[100px] rounded-full group-hover:scale-110 transition- luxury"></div>
-                    <div className="w-20 h-20 bg-emerald-950 rounded-[2rem] flex items-center justify-center mb-10 shadow-luxury group-hover:rotate-12 transition-luxury">
-                       <Sparkles className="w-10 h-10 text-gold-accent" />
+                 /* Recommended Start Section */
+                 <div className="space-y-8">
+                    <div className="flex items-center gap-2 px-4 mb-4 opacity-70">
+                       <BookOpen className="w-4 h-4 text-emerald-900" />
+                       <h2 className="text-sm font-bold text-gray-800 uppercase tracking-widest">Recommended Start</h2>
                     </div>
-                    <h3 className="text-4xl font-black text-emerald-950 mb-6 font-sans">Ready to begin?</h3>
-                    <p className="text-xl text-emerald-900/40 font-semibold leading-relaxed mb-12 max-w-md">
-                       Launch your discovery by entering any Arabic word or sequence above. 
-                       We normalize text to find exactly what you're looking for.
-                    </p>
-                    <div className="flex flex-wrap gap-4">
-                        <div className="flex items-center gap-3 px-6 py-3 bg-white shadow-luxury rounded-2xl text-emerald-900 font-bold border border-emerald-950/5 transition-luxury hover:-translate-y-1">
-                            <Info className="w-5 h-5 text-gold-accent" />
-                            Exact Matching
-                        </div>
-                        <div className="flex items-center gap-3 px-6 py-3 bg-white shadow-luxury rounded-2xl text-emerald-900 font-bold border border-emerald-950/5 transition-luxury hover:-translate-y-1">
-                            <Info className="w-5 h-5 text-gold-accent" />
-                            All 6,236 Ayat
-                        </div>
-                    </div>
-                 </div>
-               ) : results.length === 0 ? (
-                 /* No Results Polish */
-                 <div className="flex flex-col items-center justify-center py-52 bg-white/60 backdrop-blur-xl rounded-[4rem] border border-red-100 text-center animate-fade-in list-none">
-                    <div className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mb-12 shadow-inner">
-                       <Search className="w-10 h-10 text-red-300" />
-                    </div>
-                    <h3 className="text-4xl font-black text-emerald-950 mb-6">Discovery Unsuccessful</h3>
-                    <p className="text-xl text-emerald-900/40 font-semibold mb-12 max-w-sm mx-auto">
-                       We couldn't find matches for "{query}". Try using shorter word sequences.
-                    </p>
-                    <button 
-                       onClick={() => {setQuery(''); setHasSearched(false);}}
-                       className="bg-emerald-950 text-gold-accent px-14 py-6 rounded-[2.5rem] font-black text-xl hover:bg-emerald-900 hover:shadow-2xl transition-luxury shadow-luxury active:scale-95"
-                    >
-                       Reset Discovery
-                    </button>
-                 </div>
-               ) : (
-                 /* Results List Polish */
-                 <div className="space-y-12 animate-fade-in list-none">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10 px-6">
-                        <div className="space-y-4">
-                            <h2 className="text-4xl font-black text-emerald-950 flex items-center gap-4">
-                                <BookOpen className="w-10 h-10 text-gold-accent" />
-                                Matches Found
-                            </h2>
-                            <p className="text-emerald-900/40 text-sm font-black uppercase tracking-[0.25em]">
-                                Exploring {results.length} results for "{query}"
-                            </p>
-                        </div>
-                        <div className="hidden md:flex gap-3">
-                           <div className="w-14 h-14 bg-white shadow-luxury border border-emerald-950/5 rounded-2xl flex items-center justify-center text-emerald-900/20">
-                             <Layout className="w-7 h-7" />
-                           </div>
-                           <div className="w-14 h-14 bg-emerald-950 shadow-luxury rounded-2xl flex items-center justify-center">
-                             <ChevronRight className="w-7 h-7 text-gold-accent" />
-                           </div>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-12">
-                        {results.map((ayah) => (
+                    <div className="grid grid-cols-1 gap-6">
+                        {quranData.slice(1, 4).map((ayah, index) => (
                         <AyahCard 
                             key={ayah.id} 
                             ayah={ayah} 
+                            index={index}
                             query={query} 
-                            isSaved={savedAyat.some(a => a.id === ayah.id)}
+                            isSaved={(id) => savedAyat.some(a => a.id === id)}
                             onSave={handleSave}
                             onRemove={handleRemoveSaved}
+                            onView={(idx) => {
+                                // Since these are from quranData directly, we hack a results context
+                                setResults(quranData.slice(1, 4));
+                                setActiveAyahIndex(idx);
+                            }}
                         />
                         ))}
                     </div>
                  </div>
-               )}
+               ) : results.length > 0 ? (
+                 /* Results List */
+                 <div className="w-full flex-grow pb-40">
+                    <div className="flex justify-between items-end mb-6 px-4">
+                        <div className="space-y-1">
+                            <h2 className="text-lg font-black text-slate-800 flex items-center gap-3 tracking-tighter">
+                                <div className="w-8 h-8 bg-emerald-950 rounded-xl flex items-center justify-center">
+                                   <BookOpen className="w-4 h-4 text-gold-700 shadow-emerald-950/20" />
+                                </div>
+                                {results.length} Matches Found
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-2xl shadow-emerald-950/5 overflow-hidden divide-y divide-gray-50 mb-40">
+                        {results.map((ayah, index) => (
+                        <AyahCard 
+                            key={ayah.id} 
+                            ayah={ayah} 
+                            index={index}
+                            query={query} 
+                            isSaved={(id) => savedAyat.some(a => a.id === id)}
+                            onSave={handleSave}
+                            onRemove={handleRemoveSaved}
+                            onView={handleViewAyah}
+                        />
+                        ))}
+                    </div>
+                 </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-40 border-2 border-dashed border-gray-100 rounded-[2rem] text-center">
+                    <h3 className="text-3xl font-extrabold text-gray-800 mb-4">No results found</h3>
+                    <p className="text-sm text-gray-400 font-medium mb-10 max-w-xs mx-auto">
+                        Try searching for a different word or removing harakat.
+                    </p>
+                    <button 
+                        onClick={() => {setQuery(''); setHasSearched(false);}}
+                        className="bg-emerald-950 text-gold-accent px-8 py-3 rounded-lg font-bold text-xs"
+                    >
+                        Reset Search
+                    </button>
+                </div>
+              )}
             </div>
 
-            {/* Sticky Sidebar Workspace */}
-            <div className="lg:col-span-4 sticky top-40 space-y-12 list-none">
+            {/* Sidebar Section */}
+            <div className="lg:col-span-4 sticky top-24 space-y-8 list-none">
                <SavedAyatPanel 
                  savedAyat={savedAyat} 
                  onRemove={handleRemoveSaved} 
                  onClear={handleClearSaved} 
                />
-               
-               {/* Context Card Polish */}
-               <div className="p-10 bg-emerald-950 rounded-[3rem] shadow-luxury border border-white/5 relative overflow-hidden group list-none">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-gold-accent opacity-5 blur-[50px] -z-10 group-hover:scale-150 transition-luxury duration-[2s]"></div>
-                  <div className="flex items-center gap-4 mb-6">
-                     <Quote className="w-7 h-7 text-gold-accent" />
-                     <span className="font-black text-white text-xs uppercase tracking-[0.3em] leading-none">Memorization Tip</span>
-                  </div>
-                  <p className="text-lg text-emerald-100/60 font-semibold leading-relaxed leading-[1.6]">
-                     Enter exactly what you memorize. Use our normalization to discover verses with similar Arabic roots.
-                  </p>
-               </div>
             </div>
           </div>
         </div>
       </main>
+
+      {/* GLOBAL MUSHAF-STYLE MODAL VIEWER */}
+      <AyahModal 
+        isOpen={activeAyahIndex !== null}
+        onClose={() => setActiveAyahIndex(null)}
+        results={results}
+        activeIndex={activeAyahIndex}
+        onNavigate={handleNavigateAyah}
+        isSaved={(id) => savedAyat.some(a => a.id === id)}
+        onSave={handleSave}
+        onRemove={handleRemoveSaved}
+      />
 
       <Footer />
     </div>
@@ -230,8 +232,8 @@ function AppContent() {
 export default function AppPage() {
   return (
     <Suspense fallback={
-        <div className="flex items-center justify-center min-h-screen bg-cream-50">
-            <Loader2 className="w-16 h-16 text-emerald-950 animate-spin" />
+        <div className="flex items-center justify-center min-h-screen bg-gray-50/20">
+            <Loader2 className="w-8 h-8 text-emerald-950 animate-spin" />
         </div>
     }>
       <AppContent />

@@ -1,78 +1,61 @@
-import { Trash2, Bookmark, BookOpen, Layers } from 'lucide-react';
+import { Trash2, Bookmark, BookOpen } from 'lucide-react';
 
 export default function SavedAyatPanel({ savedAyat, onRemove, onClear }) {
   if (savedAyat.length === 0) {
     return (
-      <div className="bg-white/40 backdrop-blur-xl rounded-[3rem] p-16 flex flex-col items-center text-center border border-emerald-950/5 shadow-luxury animate-fade-in list-none group">
-        <div className="w-24 h-24 bg-emerald-950 rounded-[2.5rem] flex items-center justify-center mb-10 shadow-luxury group-hover:rotate-12 transition-luxury">
-          <Bookmark className="w-10 h-10 text-gold-accent" />
+      <div className="bg-gray-100 rounded-3xl p-12 flex flex-col items-center text-center border-none shadow-sm animate-fade-in list-none group min-h-[400px] justify-center">
+        <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-8 transition-all group-hover:scale-105">
+          <Bookmark className="w-8 h-8 text-gray-400" />
         </div>
-        <h3 className="text-3xl font-black text-emerald-950 mb-4 tracking-tight">Workspace Empty</h3>
-        <p className="text-xl text-emerald-900/40 max-w-[200px] font-semibold leading-relaxed">
-          Collect similar verses here for study.
+        <h3 className="text-xl font-bold text-gray-800 mb-3 tracking-tight">Your Collection is Empty</h3>
+        <p className="text-xs text-gray-400 max-w-[180px] font-medium leading-relaxed">
+          Saved ayat will appear here for quick reference during your study sessions.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-[3.5rem] p-10 border border-emerald-900/10 shadow-luxury animate-fade-in group list-none">
-      <div className="flex justify-between items-center mb-12 pb-6 border-b border-emerald-950/5">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-gold-accent rounded-2xl flex items-center justify-center shadow-luxury">
-             <Bookmark className="w-6 h-6 text-emerald-950" />
+    <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-luxury animate-fade-in list-none">
+      <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-emerald-950 rounded-xl flex items-center justify-center">
+             <Bookmark className="w-5 h-5 text-gold-accent" />
           </div>
-          <div className="space-y-1">
-            <h3 className="text-2xl font-black text-emerald-950 tracking-tight leading-none">Workspace</h3>
-            <p className="text-emerald-900/30 text-[10px] font-black uppercase tracking-[0.3em]">Research Bench</p>
+          <div className="space-y-0.5">
+            <h3 className="text-lg font-bold text-gray-800 tracking-tight leading-none">Your Collection</h3>
           </div>
         </div>
         <button 
           onClick={onClear}
-          className="w-10 h-10 bg-red-50 text-red-300 hover:text-red-600 hover:bg-red-50 rounded-xl transition-luxury flex items-center justify-center active:scale-95"
-          title="Clear Collection"
+          className="text-red-400 hover:text-red-600 transition-all font-bold text-[10px] uppercase tracking-widest"
         >
-          <Trash2 className="w-5 h-5" />
+          Clear
         </button>
       </div>
 
-      <div className="space-y-8 max-h-[500px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-emerald-950/10 scrollbar-track-transparent">
+      <div className="space-y-6 max-h-[500px] overflow-y-auto pr-2 scrollbar-thin">
         {savedAyat.map((ayah) => (
-          <div key={ayah.id} className="group/item p-6 bg-emerald-50/50 rounded-[2rem] border border-emerald-950/5 relative hover:bg-white transition-luxury hover:shadow-luxury hover:-translate-y-1 overflow-hidden">
-             {/* Decorative Background Icon */}
-             <div className="absolute -top-4 -right-4 opacity-0 group-hover/item:opacity-5 transition-luxury rotate-12 scale-150 pointer-events-none">
-                <Layers className="w-20 h-20 text-emerald-950" />
-             </div>
-
-             <div className="flex justify-between items-start mb-6">
-                <div className="flex items-center gap-2">
-                    <BookOpen className="w-3.5 h-3.5 text-gold-700 opacity-40" />
-                    <span className="text-[10px] font-black text-emerald-900/40 uppercase tracking-[0.2em] leading-none">
-                        Surah {ayah.surahNumber}:{ayah.ayahNumber}
+          <div key={ayah.id} className="group/item p-6 bg-gray-50 rounded-2xl border border-gray-100 relative hover:bg-emerald-50 transition-all hover:border-emerald-200">
+             <div className="flex justify-between items-start mb-4">
+                <div className="flex items-center gap-1.5 opacity-40">
+                    <BookOpen className="w-3 h-3 text-emerald-900" />
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-emerald-950">
+                        {ayah.surahName} • {ayah.surahNumber}:{ayah.ayahNumber}
                     </span>
                 </div>
                 <button 
                    onClick={() => onRemove(ayah.id)}
-                   className="text-emerald-900/10 hover:text-red-500 transition-luxury group-hover/item:text-emerald-900/30"
+                   className="text-gray-300 hover:text-red-500 transition-all"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-3.5 h-3.5" />
                 </button>
              </div>
-             <p className="text-right font-scheherazade text-2xl leading-[1.8] text-emerald-950 line-clamp-3 group-hover/item:scale-[1.01] transition-luxury" dir="rtl">
+             <p className="text-right font-scheherazade text-xl leading-[1.6] text-gray-800 line-clamp-3" dir="rtl">
                 {ayah.text}
              </p>
           </div>
         ))}
-      </div>
-
-      <div className="mt-12 pt-8 border-t border-emerald-950/5 flex justify-between items-center px-4 animate-fade-in">
-        <p className="text-emerald-900/20 text-xs font-black uppercase tracking-[0.4em]">
-          {savedAyat.length} Collected
-        </p>
-        <div className="flex gap-1.5">
-            <div className="w-1.5 h-1.5 bg-gold-accent opacity-20 rounded-full"></div>
-            <div className="w-1.5 h-1.5 bg-gold-accent opacity-20 rounded-full"></div>
-        </div>
       </div>
     </div>
   );

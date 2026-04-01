@@ -1,52 +1,58 @@
 import Link from 'next/link';
-import { Heart, Monitor, BookOpen, Quote } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-emerald-950 text-emerald-100 py-32 border-t border-white/5 relative overflow-hidden">
-        {/* Subtle Background Element */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gold-accent opacity-5 blur-[150px] -z-0"></div>
-
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 flex flex-col items-center">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-20 mb-20 w-full animate-fade-in list-none">
-                <div className="flex items-center gap-6 group">
-                    <div className="w-16 h-16 bg-gold-accent rounded-[2rem] flex items-center justify-center shadow-luxury group-hover:scale-110 transition-luxury">
-                        <span className="text-emerald-950 font-black text-3xl">A</span>
-                    </div>
-                    <div className="space-y-1">
-                        <h2 className="text-4xl font-black text-white tracking-[0.05em] leading-none mb-1">
-                            Ayah <span className="text-gold-accent opacity-80 backdrop-blur-sm">Finder</span>
+    <footer className="bg-emerald-950 text-white py-24 border-t border-white/5 relative overflow-hidden">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 flex flex-col">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-16 mb-20">
+                {/* Brand Section */}
+                <div className="md:col-span-5 space-y-6">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-gold-accent rounded-xl flex items-center justify-center shadow-lg">
+                            <span className="text-emerald-950 font-black text-2xl">A</span>
+                        </div>
+                        <h2 className="text-2xl font-bold text-white tracking-tight">
+                            Ayah<span className="text-gold-accent opacity-80 backdrop-blur-sm">Finder</span>
                         </h2>
-                        <p className="text-emerald-100/30 text-xs font-black uppercase tracking-[0.5em] leading-none">The Quran Search Standard</p>
+                    </div>
+                    <p className="text-emerald-100/30 text-xs font-semibold leading-relaxed max-w-sm">
+                        The premium Quranic search utility designed for the modern Hifz student, researcher, and avid Quran learner. Find matching patterns across the entire Holy Quran in seconds.
+                    </p>
+                </div>
+
+                {/* Connect Section */}
+                <div className="md:col-span-3 space-y-6">
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gold-accent/40">Connect</h3>
+                    <div className="flex flex-col gap-4">
+                        <Link href="/" className="text-emerald-100/40 hover:text-white transition-all font-bold text-[11px] uppercase tracking-widest">Landing Page</Link>
+                        <Link href="/app" className="text-emerald-100/40 hover:text-white transition-all font-bold text-[11px] uppercase tracking-widest">Search App</Link>
+                        <Link href="/#features" className="text-emerald-100/40 hover:text-white transition-all font-bold text-[11px] uppercase tracking-widest">Features</Link>
                     </div>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-center gap-14">
-                    <Link href="/" className="text-emerald-100/40 hover:text-white transition-luxury font-black text-sm uppercase tracking-[0.3em]">Home</Link>
-                    <Link href="/app" className="text-emerald-100/40 hover:text-white transition-luxury font-black text-sm uppercase tracking-[0.3em]">App</Link>
-                    <Link href="/#features" className="text-emerald-100/40 hover:text-white transition-luxury font-black text-sm uppercase tracking-[0.3em]">Features</Link>
-                </div>
-
-                <div className="flex items-center gap-6">
-                    <div className="w-14 h-14 bg-white/5 rounded-[1.5rem] border border-white/10 flex items-center justify-center group cursor-pointer hover:border-gold-accent/40 transition-luxury">
-                        <Monitor className="w-6 h-6 text-gold-accent opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-luxury" />
-                    </div>
-                    <div className="w-14 h-14 bg-white/5 rounded-[1.5rem] border border-white/10 flex items-center justify-center group cursor-pointer hover:border-gold-accent/40 transition-luxury">
-                        <Heart className="w-6 h-6 text-red-400 opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-luxury" />
+                {/* About Section */}
+                <div className="md:col-span-4 space-y-6">
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gold-accent/40">About</h3>
+                    <div className="flex flex-col gap-4">
+                        <div className="flex items-center gap-3 text-emerald-100/40 hover:text-white transition-all group cursor-pointer">
+                            <div className="w-4 h-4 rounded-full border border-white/20 group-hover:border-white transition-all"></div>
+                            <span className="font-bold text-[11px] uppercase tracking-widest">Chrome Extension</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-emerald-100/40 hover:text-white transition-all group cursor-pointer">
+                            <div className="w-4 h-4 rounded-full border border-white/20 group-hover:border-white transition-all"></div>
+                            <span className="font-bold text-[11px] uppercase tracking-widest">Support the Project</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div className="pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-10 w-full animate-fade-in list-none">
-                <p className="text-emerald-100/20 text-xs font-black tracking-[0.5em] uppercase text-center md:text-left transition-luxury hover:text-emerald-100/40">
-                    © {new Date().getFullYear()} Ayah Finder Workspace. Designed for Quranic Excellence.
+            {/* Bottom Credits (Matched to Image) */}
+            <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 opacity-40">
+                <p className="text-[10px] font-bold tracking-widest uppercase">
+                    © {new Date().getFullYear()} Ayah Finder. All rights reserved. Designed for excellence.
                 </p>
-                <div className="flex flex-wrap justify-center items-center gap-6 text-xs text-emerald-100/20 font-black uppercase tracking-[0.3em] transition-luxury hover:text-emerald-100/40">
-                    <span>Precision Matching</span>
-                    <div className="w-1.5 h-1.5 bg-gold-accent opacity-20 rounded-full"></div>
-                    <span>Global Recognition</span>
-                    <div className="w-1.5 h-1.5 bg-gold-accent opacity-20 rounded-full"></div>
-                    <span>English UI V1.0</span>
+                <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest">
+                    <span>Made with ❤️ for the Ummah</span>
                 </div>
             </div>
         </div>

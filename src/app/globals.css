@@ -20,11 +20,33 @@ body {
 .font-arabic {
   font-family: 'Amiri', serif;
   direction: rtl;
+  text-rendering: optimizeLegibility;
 }
 
 .font-scheherazade {
   font-family: 'Scheherazade New', serif;
   direction: rtl;
+  text-rendering: optimizeLegibility;
+}
+
+/* Premium Quranic Display Styling */
+.font-quran {
+  font-family: 'Amiri', serif;
+  direction: rtl;
+  line-height: 2.4; /* Critical for showing all Harakat (vowels) without cropping */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Specific OpenType features for better Arabic/Quranic composition if the font supports them */
+  font-feature-settings: "cv01", "cv02", "cv03", "cv04", "ss01", "ss03", "ss05";
+  text-align: center;
+}
+
+.font-preview {
+  font-family: 'Amiri', serif;
+  direction: rtl;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
 }
 
 /* Custom Scrollbar */
