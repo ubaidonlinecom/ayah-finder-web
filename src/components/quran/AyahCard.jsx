@@ -17,57 +17,49 @@ export default function AyahCard({ ayah, index, query, isSaved, onSave, onRemove
   return (
     <div 
         onClick={handleOpen}
-        className="bg-white p-6 hover:bg-emerald-50/50 transition-all group/card relative flex items-center justify-between gap-6 cursor-pointer border-b border-gray-50 last:border-b-0"
+        className="bg-white p-8 sm:p-12 hover:bg-emerald-50/10 transition-luxury group/card relative flex flex-col items-center md:items-end justify-center gap-10 cursor-pointer rounded-[3rem] border border-transparent shadow-sm hover:shadow-2xl hover:shadow-emerald-950/5 mb-8"
     >
-        <div className="flex items-center gap-8 flex-grow overflow-hidden">
-            {/* Surah Ref Badge & Name (Updated for Visibility) */}
-            <div className="flex-shrink-0 w-28 flex flex-col items-start gap-2">
-                <div className="inline-flex items-center gap-2 bg-emerald-950 px-3 py-1.5 rounded-lg shadow-md border border-white/5">
-                    <span className="text-gold-accent font-black text-[10px] uppercase tracking-tighter leading-none">
-                    {ayah.surahNumber}<span className="text-gold-accent/40 mx-0.5">:</span>{ayah.ayahNumber}
-                    </span>
+        {/* Top Header Row (Meta & Actions) */}
+        <div className="w-full flex items-center justify-between pointer-events-none">
+            <div className="flex flex-col items-start gap-2">
+                <div className="bg-emerald-950 text-gold-accent px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg">
+                    {ayah.surahNumber}:{ayah.ayahNumber}
                 </div>
-                <p 
-                  className="font-arabic text-xl text-emerald-900 leading-none truncate max-w-full drop-shadow-sm" 
-                  dir="rtl"
-                  lang="ar"
-                >
+                <p className="font-arabic text-xl text-emerald-900/60" dir="rtl" lang="ar">
                     {ayah.surahName}
                 </p>
             </div>
 
-            {/* Ayah Preview Line (Refined Font Treatment) */}
-            <div className="flex-grow overflow-hidden pr-6">
-                <div 
-                    className="font-preview text-2xl text-emerald-950 text-right truncate group-hover/card:text-black transition-colors" 
-                    dir="rtl"
-                    lang="ar"
-                >
-                    {highlightMatch(ayah.text, query)}
-                </div>
+            <div className="flex items-center gap-4 pointer-events-auto">
+               <button
+                 onClick={toggleSave}
+                 className={`w-12 h-12 flex items-center justify-center rounded-2xl transition-luxury border-2 ${
+                    isSaved 
+                      ? 'bg-gold-accent text-emerald-950 border-gold-accent shadow-xl shadow-gold-accent/20 scale-110' 
+                      : 'bg-white border-emerald-950/[0.05] text-emerald-950/10 hover:text-emerald-950 hover:border-emerald-950/20'
+                 }`}
+               >
+                 {isSaved ? <BookmarkCheck className="w-5 h-5" /> : <Bookmark className="w-5 h-5" />}
+               </button>
+               
+               <button
+                 onClick={handleOpen}
+                 className="w-12 h-12 bg-emerald-950 text-gold-accent rounded-2xl transition-luxury shadow-2xl hover:bg-emerald-800 active:scale-95 flex items-center justify-center group/btn"
+               >
+                 <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+               </button>
             </div>
         </div>
 
-        {/* Action Column */}
-        <div className="flex items-center gap-4 flex-shrink-0">
-           <button
-             onClick={toggleSave}
-             className={`w-11 h-11 flex items-center justify-center rounded-xl transition-all shadow-sm border ${
-                isSaved 
-                  ? 'bg-gold-accent text-emerald-950 border-gold-accent' 
-                  : 'bg-white border-gray-100 text-gray-300 hover:text-emerald-950 hover:border-emerald-950/20'
-             }`}
-           >
-             {isSaved ? <BookmarkCheck className="w-5 h-5" /> : <Bookmark className="w-5 h-5" />}
-           </button>
-           
-           <button
-             onClick={handleOpen}
-             className="px-6 py-3.5 bg-emerald-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-800 transition-all shadow-lg active:scale-95 flex items-center gap-2"
-           >
-             <span>View Full Ayah</span>
-             <ArrowRight className="w-4 h-4 text-gold-accent group-hover/card:translate-x-0.5 transition-all" />
-           </button>
+        {/* Main Reading Area (Full Width Focused) */}
+        <div className="w-full">
+            <div 
+                className="font-quran-reading text-3xl sm:text-4xl text-emerald-950 text-right leading-[3.5] hover:text-black transition-colors selection:bg-gold-accent/20" 
+                dir="rtl"
+                lang="ar"
+            >
+                {highlightMatch(ayah.text, query)}
+            </div>
         </div>
     </div>
   );

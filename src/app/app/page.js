@@ -6,11 +6,13 @@ import Navbar from '@/components/layout/Navbar';
 import SearchBar from '@/components/quran/SearchBar';
 import AyahCard from '@/components/quran/AyahCard';
 import AyahModal from '@/components/quran/AyahModal';
+import Pagination from '@/components/quran/Pagination';
 import SavedAyatPanel from '@/components/quran/SavedAyatPanel';
 import Footer from '@/components/layout/Footer';
-import quranData from '@/data/quran-data.json';
+import { searchQuran } from '@/utils/search-engine';
 import { normalizeArabic } from '@/utils/arabic-utils';
-import { Search, Loader2, Sparkles, BookOpen } from 'lucide-react';
+import { Search, Loader2, BookOpen } from 'lucide-react';
+import quranData from '@/data/quran-data.json';
 
 function AppContent() {
   const searchParams = useSearchParams();
@@ -22,6 +24,10 @@ function AppContent() {
   const [savedAyat, setSavedAyat] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [activeAyahIndex, setActiveAyahIndex] = useState(null);
+  
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Handle initial query from URL
   useEffect(() => {
@@ -36,26 +42,28 @@ function AppContent() {
 
     setIsSearching(true);
     setHasSearched(true);
+    setCurrentPage(1); // Reset to first page
     
-    // Simulate real search delay for professional UX/Feel
+    // Use centralized search engine
     setTimeout(() => {
-      const normalizedQuery = normalizeArabic(searchQuery);
-      
-      const filtered = quranData.filter(ayah => {
-        const normalizedText = normalizeArabic(ayah.text);
-        const normalizedSurah = normalizeArabic(ayah.surahName);
-        
-        return normalizedText.includes(normalizedQuery) || 
-               normalizedSurah.includes(normalizedQuery);
-      });
-      
-      setResults(filtered);
+      const searchResults = searchQuran(searchQuery);
+      setResults(searchResults);
       setIsSearching(false);
     }, 400);
   };
 
+  const totalPages = Math.ceil(results.length / itemsPerPage);
+  const paginatedResults = results.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleViewAyah = (index) => {
-    setActiveAyahIndex(index);
+    // Correct index mapping for modal from paginated subset
+    const actualIndex = (currentPage - 1) * itemsPerPage + index;
+    setActiveAyahIndex(actualIndex);
   };
 
   const handleNavigateAyah = (newIndex) => {
@@ -99,7 +107,7 @@ function AppContent() {
       <main className="flex-grow pt-28 pb-16 px-6 md:px-12">
         <div className="max-w-6xl mx-auto flex flex-col items-center">
           
-          {/* Header Section (Matched to Image) */}
+          {/* Header Section */}
           <div className="text-center mb-6 max-w-xl mx-auto flex flex-col items-center">
              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-950 text-gold-accent rounded-full text-[9px] font-bold uppercase tracking-widest shadow-lg mb-6">
                 <Search className="w-3 h-3" />
@@ -113,7 +121,7 @@ function AppContent() {
              </p>
           </div>
 
-          {/* Search Area (Matched to Image) */}
+          {/* Search Area */}
           <SearchBar 
             value={query} 
             onChange={setQuery} 
@@ -121,33 +129,36 @@ function AppContent() {
             disabled={isSearching}
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mt-8 w-full animate-fade-in list-none">
-            {/* Results Section */}
-            <div className="lg:col-span-8 space-y-8 min-h-[500px]">
+          <div className="flex flex-col items-center mt-8 w-full animate-fade-in list-none pb-40">
+            {/* Results Section (Now Full Width & Focused) */}
+            <div className="w-full max-w-5xl space-y-12 min-h-[500px]">
                {isSearching ? (
                  <div className="flex flex-col items-center justify-center py-40 animate-pulse">
-                    <Loader2 className="w-8 h-8 text-emerald-950 animate-spin mb-4" />
-                    <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">Searching Quran...</p>
+                    <Loader2 className="w-10 h-10 text-emerald-950 animate-spin mb-6 opacity-20" />
+                    <p className="text-emerald-900/40 text-[10px] font-black uppercase tracking-[0.4em]">Perusing the Holy Quran...</p>
                  </div>
                ) : !hasSearched ? (
                  /* Recommended Start Section */
-                 <div className="space-y-8">
-                    <div className="flex items-center gap-2 px-4 mb-4 opacity-70">
-                       <BookOpen className="w-4 h-4 text-emerald-900" />
-                       <h2 className="text-sm font-bold text-gray-800 uppercase tracking-widest">Recommended Start</h2>
+                 <div className="space-y-10">
+                    <div className="flex items-center justify-center gap-4 px-4 opacity-70">
+                       <div className="h-[1px] flex-grow bg-emerald-950/10"></div>
+                       <div className="flex items-center gap-3">
+                          <BookOpen className="w-4 h-4 text-emerald-900" />
+                          <h2 className="text-[10px] font-black text-emerald-950 uppercase tracking-[0.3em]">Foundation Verses</h2>
+                       </div>
+                       <div className="h-[1px] flex-grow bg-emerald-950/10"></div>
                     </div>
-                    <div className="grid grid-cols-1 gap-6">
+                    <div className="grid grid-cols-1 gap-8">
                         {quranData.slice(1, 4).map((ayah, index) => (
                         <AyahCard 
                             key={ayah.id} 
                             ayah={ayah} 
                             index={index}
                             query={query} 
-                            isSaved={(id) => savedAyat.some(a => a.id === id)}
+                            isSaved={savedAyat.some(a => a.id === ayah.id)}
                             onSave={handleSave}
                             onRemove={handleRemoveSaved}
                             onView={(idx) => {
-                                // Since these are from quranData directly, we hack a results context
                                 setResults(quranData.slice(1, 4));
                                 setActiveAyahIndex(idx);
                             }}
@@ -157,62 +168,80 @@ function AppContent() {
                  </div>
                ) : results.length > 0 ? (
                  /* Results List */
-                 <div className="w-full flex-grow pb-40">
-                    <div className="flex justify-between items-end mb-6 px-4">
-                        <div className="space-y-1">
-                            <h2 className="text-lg font-black text-slate-800 flex items-center gap-3 tracking-tighter">
-                                <div className="w-8 h-8 bg-emerald-950 rounded-xl flex items-center justify-center">
-                                   <BookOpen className="w-4 h-4 text-gold-700 shadow-emerald-950/20" />
-                                </div>
-                                {results.length} Matches Found
-                            </h2>
+                 <div className="w-full space-y-10">
+                    <div className="flex flex-col sm:flex-row justify-between items-center px-4 gap-6">
+                        <div className="flex items-center gap-6">
+                             <div className="w-16 h-16 bg-emerald-950 rounded-[2rem] flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-luxury cursor-pointer group">
+                                <BookOpen className="w-6 h-6 text-gold-accent group-hover:scale-110 transition-transform" />
+                             </div>
+                             <div className="space-y-1.5">
+                                 <h2 className="text-2xl font-black text-slate-800 tracking-tight">Search Results</h2>
+                                 <div className="flex items-center gap-3">
+                                    <p className="text-[10px] font-black text-emerald-900/40 uppercase tracking-[0.3em]">
+                                        {results.length} total matches
+                                    </p>
+                                    <span className="w-1 h-1 bg-emerald-900/20 rounded-full"></span>
+                                    <p className="text-[10px] font-black text-gold-700 uppercase tracking-[0.3em]">
+                                        Page {currentPage} of {totalPages}
+                                    </p>
+                                 </div>
+                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-2xl shadow-emerald-950/5 overflow-hidden divide-y divide-gray-50 mb-40">
-                        {results.map((ayah, index) => (
+                    <div className="bg-white rounded-[3rem] border border-emerald-950/5 shadow-2xl shadow-emerald-950/5 overflow-hidden divide-y divide-emerald-950/[0.03]">
+                        {paginatedResults.map((ayah, index) => (
                         <AyahCard 
                             key={ayah.id} 
                             ayah={ayah} 
                             index={index}
                             query={query} 
-                            isSaved={(id) => savedAyat.some(a => a.id === id)}
+                            isSaved={savedAyat.some(a => a.id === ayah.id)}
                             onSave={handleSave}
                             onRemove={handleRemoveSaved}
                             onView={handleViewAyah}
                         />
                         ))}
                     </div>
+
+                    <Pagination 
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
                  </div>
               ) : (
-                <div className="flex flex-col items-center justify-center py-40 border-2 border-dashed border-gray-100 rounded-[2rem] text-center">
-                    <h3 className="text-3xl font-extrabold text-gray-800 mb-4">No results found</h3>
-                    <p className="text-sm text-gray-400 font-medium mb-10 max-w-xs mx-auto">
-                        Try searching for a different word or removing harakat.
+                <div className="flex flex-col items-center justify-center py-40 bg-white border border-emerald-950/5 rounded-[4rem] text-center px-10 shadow-3xl shadow-emerald-950/5">
+                    <div className="w-28 h-28 bg-emerald-50 rounded-full flex items-center justify-center mb-10">
+                       <Search className="w-12 h-12 text-emerald-900/20" />
+                    </div>
+                    <h3 className="text-4xl font-black text-emerald-950 mb-6 tracking-tighter">No Ayahs Found</h3>
+                    <p className="text-gray-500 font-medium mb-12 max-w-sm mx-auto leading-relaxed">
+                        The text could not be located in the current indices. Try these refinements:
                     </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left max-w-lg mx-auto mb-14">
+                        <div className="p-6 bg-gray-50/50 rounded-3xl border border-emerald-950/[0.03]">
+                             <p className="text-[10px] font-black text-emerald-900/30 uppercase tracking-widest mb-3">Refinement 1</p>
+                             <p className="text-sm font-bold text-gray-700 leading-relaxed">Remove manual Harakat (Zabar, Zer, Pesh) from your search query.</p>
+                        </div>
+                        <div className="p-6 bg-gray-50/50 rounded-3xl border border-emerald-950/[0.03]">
+                             <p className="text-[10px] font-black text-emerald-900/30 uppercase tracking-widest mb-3">Refinement 2</p>
+                             <p className="text-sm font-bold text-gray-700 leading-relaxed">Ensure you are using standard Arabic keyboard characters.</p>
+                        </div>
+                    </div>
                     <button 
                         onClick={() => {setQuery(''); setHasSearched(false);}}
-                        className="bg-emerald-950 text-gold-accent px-8 py-3 rounded-lg font-bold text-xs"
+                        className="bg-emerald-950 text-gold-accent px-12 py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] shadow-2xl hover:bg-emerald-800 transition-luxury active:scale-95"
                     >
-                        Reset Search
+                        Clear Workspace
                     </button>
                 </div>
               )}
-            </div>
-
-            {/* Sidebar Section */}
-            <div className="lg:col-span-4 sticky top-24 space-y-8 list-none">
-               <SavedAyatPanel 
-                 savedAyat={savedAyat} 
-                 onRemove={handleRemoveSaved} 
-                 onClear={handleClearSaved} 
-               />
             </div>
           </div>
         </div>
       </main>
 
-      {/* GLOBAL MUSHAF-STYLE MODAL VIEWER */}
       <AyahModal 
         isOpen={activeAyahIndex !== null}
         onClose={() => setActiveAyahIndex(null)}
